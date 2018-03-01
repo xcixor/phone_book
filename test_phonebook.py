@@ -30,12 +30,12 @@ class TestPhonebookCase(unittest.TestCase):
         self.cont2.create_contact(self.contact_list)
         self.assertTrue(len(self.contact_list), 2)
         response = Phonebook.view_contacts(self.contact_list)
-        self.assertIn(response, 'Tony')
+        self.assertTrue({'name':'peter','name':'Tony'}, response)
 
     def test_update_contact(self):
         """Test app can update contact"""
         self.cont1.create_contact(self.contact_list)
-        response = self.cont1.update_contact(contact='0733333333')
+        response = self.cont1.update_contact(self.contact_list, contact='0733333333')
         self.assertTrue(response, {'name':'Peter', 'contact':'0733333333'})
 
     def test_delete_contact(self):
