@@ -14,6 +14,7 @@ class TestPhonebookCase(unittest.TestCase):
         self.contact_list = []    
         self.cont1 = Phonebook('Peter', '0712705422')
         self.cont2 = Phonebook('Tony', '0719121212')
+
     def tearDown(self):
         del self.cont1
         del self.cont2
@@ -24,6 +25,18 @@ class TestPhonebookCase(unittest.TestCase):
         response = self.cont1.create_contact(self.contact_list)
         self.assertTrue(response['message'], "Contact successfuly created")
     
+    def test_cannot_create_duplicate(self):
+        """Test app cannot create duplicate contact"""
+        self.cont1.create_contact(self.contact_list)
+        response = self.cont1.create_contact(self.contact_list)
+        self.assertTrue(response['message'], "Cannot create duplicate contact")
+        
+    def test_cannot_create_empty_contact(self):
+        """Test app cannot create empty contact"""
+        cont = Phonebook('', '')
+        resp = cont.create_contact()
+        self.assertTrue(resp['message'], "Cannot create empty contact")
+
     def test_view_contacts(self):
         """Test app can return all contacts created"""
         self.cont1.create_contact(self.contact_list)
@@ -31,6 +44,14 @@ class TestPhonebookCase(unittest.TestCase):
         self.assertTrue(len(self.contact_list), 2)
         response = Phonebook.view_contacts(self.contact_list)
         self.assertTrue({'name':'peter','name':'Tony'}, response)
+        
+    def test_valid_contact_name(self):
+        """Test app cannot create contact with contact name \
+        having special characters"""
+        cont = Phonebook('#@#$$%^#','0712433434'):
+        resp = cont.create_contact(self.contact_list)
+        self.assertTrue(response['message'], "Contact cannot \
+        contain special characters")        
 
     def test_update_contact(self):
         """Test app can update contact"""
