@@ -19,7 +19,7 @@ class TestPhonebookCase(unittest.TestCase):
         del self.cont2
         del self.contact_list
 
-    def test_business(self):
+    def test_create_contact(self):
         """Test app can create a contact"""
         response = self.cont1.create_contact(self.contact_list)
         self.assertTrue(response['message'], "Contact successfuly created")
