@@ -2,7 +2,7 @@
 
 import unittest
 
-from phonebook import Phonebook
+from app.models import Phonebook
 
 class TestPhonebookCase(unittest.TestCase):
     """
@@ -19,5 +19,32 @@ class TestPhonebookCase(unittest.TestCase):
         del self.cont2
         del self.contact_list
 
+    def test_business(self):
+        """Test app can create a contact"""
+        response = self.cont1.create_contact(self.contact_list)
+        self.assertTrue(response['message'], "Contact successfuly created")
+    
+    def test_view_contacts(self):
+        """Test app can return all contacts created"""
+        self.cont1.create_contact(self.contact_list)
+        self.cont2.create_contact(self.contact_list)
+        self.assertTrue(len(self.contact_list), 2)
+        response = Phonebook.view_contacts(self.contact_list)
+        self.assertIn(response, 'Tony')
 
+    def test_update_contact(self):
+        """Test app can update contact"""
+        self.cont1.create_contact(self.contact_list)
+        response = self.cont1.update_contact(contact='0733333333')
+        self.assertTrue(response, {'name':'Peter', 'contact':'0733333333'})
 
+    def test_delete_contact(self):
+        """Test app can delete contact effectively"""
+        self.cont1.create_contact(self.contact_list)
+        self.cont2.create_contact(self.contact_list)
+        response = self.cont1.delete_contact(self.contact_list)
+        self.assertTrue(response)
+        self.assertTrue(self.contact_list, [{'name':'Tony', 'contact':'0719121212'}])
+        
+    
+        
